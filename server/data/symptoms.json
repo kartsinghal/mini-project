@@ -1,0 +1,242 @@
+[
+  {
+    "id": 1,
+    "symptom_name": "fever",
+    "aliases": ["high temperature", "pyrexia", "hot", "temperature", "feverish"],
+    "possible_conditions": ["Common Cold", "Flu (Influenza)", "COVID-19", "Dengue Fever", "Malaria", "Typhoid"],
+    "severity": "moderate",
+    "precautions": [
+      "Rest and stay hydrated",
+      "Take paracetamol/acetaminophen to reduce temperature",
+      "Use a cool damp cloth on forehead",
+      "Wear light clothing",
+      "Avoid cold baths"
+    ],
+    "basic_advice": "A fever above 38°C (100.4°F) usually means your body is fighting an infection. Monitor your temperature every few hours. Seek immediate medical help if fever exceeds 40°C (104°F), lasts more than 3 days, or is accompanied by severe symptoms.",
+    "when_to_see_doctor": "Fever above 40°C, persistent for more than 3 days, or accompanied by rash, severe headache, stiff neck"
+  },
+  {
+    "id": 2,
+    "symptom_name": "headache",
+    "aliases": ["head pain", "migraine", "head hurts", "head ache", "head pounding"],
+    "possible_conditions": ["Tension Headache", "Migraine", "Dehydration", "Sinusitis", "Hypertension", "Cluster Headache"],
+    "severity": "mild",
+    "precautions": [
+      "Rest in a quiet, dark room",
+      "Stay hydrated — drink water",
+      "Apply cold or warm compress",
+      "Avoid screens and bright lights",
+      "Practice relaxation techniques"
+    ],
+    "basic_advice": "Most headaches are tension-related and resolve within a few hours. Try over-the-counter pain relievers like ibuprofen or paracetamol. Identify and avoid triggers such as stress, dehydration, or caffeine withdrawal.",
+    "when_to_see_doctor": "Sudden severe headache, headache after head injury, headache with fever and stiff neck, vision changes"
+  },
+  {
+    "id": 3,
+    "symptom_name": "cough",
+    "aliases": ["coughing", "dry cough", "wet cough", "persistent cough", "chest cough"],
+    "possible_conditions": ["Common Cold", "Bronchitis", "Asthma", "COVID-19", "Allergies", "GERD"],
+    "severity": "mild",
+    "precautions": [
+      "Stay hydrated with warm fluids",
+      "Use honey and ginger in warm water",
+      "Use a humidifier",
+      "Avoid smoking and irritants",
+      "Gargle with warm salt water"
+    ],
+    "basic_advice": "A cough is usually the body's way of clearing airways. Dry coughs may indicate viral infections or allergies. Wet/productive coughs may suggest bacterial infection. If cough persists more than 2-3 weeks, see a doctor.",
+    "when_to_see_doctor": "Coughing blood, cough with high fever, persistent cough over 3 weeks, difficulty breathing"
+  },
+  {
+    "id": 4,
+    "symptom_name": "sore throat",
+    "aliases": ["throat pain", "throat ache", "scratchy throat", "throat irritation", "pharyngitis"],
+    "possible_conditions": ["Viral Pharyngitis", "Strep Throat", "Tonsillitis", "Common Cold", "Flu", "Acid Reflux"],
+    "severity": "mild",
+    "precautions": [
+      "Gargle with warm salt water",
+      "Drink warm liquids like tea with honey",
+      "Use throat lozenges",
+      "Stay hydrated",
+      "Avoid cold drinks and foods"
+    ],
+    "basic_advice": "Most sore throats are caused by viruses and resolve within 7-10 days without antibiotics. Honey, warm teas, and salt water gargles provide relief. If caused by strep bacteria (confirmed by test), antibiotics are needed.",
+    "when_to_see_doctor": "Severe difficulty swallowing, difficulty breathing, high fever with throat pain, visible pus on tonsils"
+  },
+  {
+    "id": 5,
+    "symptom_name": "chest pain",
+    "aliases": ["chest ache", "chest tightness", "chest pressure", "chest discomfort", "heart pain"],
+    "possible_conditions": ["Angina", "Heart Attack (EMERGENCY)", "Costochondritis", "GERD / Acid Reflux", "Anxiety / Panic Attack", "Pulmonary Embolism"],
+    "severity": "critical",
+    "precautions": [
+      "CALL EMERGENCY SERVICES IMMEDIATELY (108/911)",
+      "Do not drive yourself to hospital",
+      "Chew aspirin if not allergic (325mg for cardiac events)",
+      "Rest and stay calm",
+      "Loosen tight clothing"
+    ],
+    "basic_advice": "Chest pain should ALWAYS be taken seriously. While many causes are non-cardiac (acid reflux, anxiety, muscle strain), chest pain can indicate a heart attack or other life-threatening conditions. When in doubt, call emergency services immediately.",
+    "when_to_see_doctor": "IMMEDIATELY — Do not wait. Call emergency services (108/112/911) right now."
+  },
+  {
+    "id": 6,
+    "symptom_name": "fatigue",
+    "aliases": ["tiredness", "exhaustion", "low energy", "weakness", "lethargy", "always tired"],
+    "possible_conditions": ["Anemia", "Hypothyroidism", "Diabetes", "Depression", "Sleep Disorders", "Chronic Fatigue Syndrome"],
+    "severity": "mild",
+    "precautions": [
+      "Ensure 7-9 hours of quality sleep",
+      "Maintain a balanced, nutritious diet",
+      "Exercise regularly (even light walks help)",
+      "Limit caffeine and alcohol",
+      "Manage stress through mindfulness"
+    ],
+    "basic_advice": "Persistent fatigue lasting more than 2 weeks despite adequate sleep warrants medical evaluation. Track when fatigue occurs, its severity, and associated symptoms. Blood tests can identify common causes like anemia or thyroid issues.",
+    "when_to_see_doctor": "Fatigue lasting more than 2 weeks, associated with unexplained weight loss, chest pain, or shortness of breath"
+  },
+  {
+    "id": 7,
+    "symptom_name": "nausea",
+    "aliases": ["feeling sick", "queasy", "nauseous", "upset stomach", "want to vomit"],
+    "possible_conditions": ["Gastroenteritis", "Food Poisoning", "Pregnancy", "Motion Sickness", "Migraine", "Medications Side Effects"],
+    "severity": "mild",
+    "precautions": [
+      "Sip clear fluids slowly (ORS, coconut water)",
+      "Eat bland foods (BRAT diet: bananas, rice, applesauce, toast)",
+      "Avoid fatty, spicy, or strong-smelling foods",
+      "Rest and avoid sudden movements",
+      "Fresh air and ginger tea may help"
+    ],
+    "basic_advice": "Nausea is usually short-lived and resolves on its own. Stay hydrated with small, frequent sips of liquid. Ginger (tea, capsules, or candied) is a well-known natural nausea remedy. Avoid solid foods until nausea subsides.",
+    "when_to_see_doctor": "Vomiting blood, severe abdominal pain, vomiting lasting more than 24 hours, signs of dehydration"
+  },
+  {
+    "id": 8,
+    "symptom_name": "shortness of breath",
+    "aliases": ["difficulty breathing", "breathlessness", "cant breathe", "breathing difficulty", "dyspnea"],
+    "possible_conditions": ["Asthma", "Anxiety / Panic Attack", "COVID-19", "Heart Failure", "Pulmonary Embolism", "Pneumonia"],
+    "severity": "critical",
+    "precautions": [
+      "Sit upright in a comfortable position",
+      "Breathe slowly and deeply through pursed lips",
+      "Use prescribed inhaler if you have one",
+      "Call emergency services if severe",
+      "Avoid strenuous activity"
+    ],
+    "basic_advice": "Sudden or severe shortness of breath is a medical emergency. Even if mild, new-onset breathing difficulty should be evaluated promptly. Stay calm — anxiety worsens breathlessness. If you have an inhaler, use it as directed.",
+    "when_to_see_doctor": "IMMEDIATELY if severe. Promptly if new onset, associated with chest pain, or not resolving with rest."
+  },
+  {
+    "id": 9,
+    "symptom_name": "dizziness",
+    "aliases": ["lightheaded", "vertigo", "spinning", "dizzy", "loss of balance", "woozy"],
+    "possible_conditions": ["Vertigo (BPPV)", "Hypotension (Low Blood Pressure)", "Dehydration", "Anemia", "Inner Ear Infection", "Hypoglycemia"],
+    "severity": "moderate",
+    "precautions": [
+      "Sit or lie down immediately to prevent falling",
+      "Move slowly when standing up",
+      "Stay hydrated",
+      "Eat regular meals to maintain blood sugar",
+      "Avoid sudden head movements"
+    ],
+    "basic_advice": "Dizziness is very common and usually not serious. Standing up too fast (orthostatic hypotension) is a common cause. Stay seated until it passes. If dizzy spells are frequent or accompanied by other symptoms, investigation is needed.",
+    "when_to_see_doctor": "Severe spinning sensation, dizziness with chest pain, facial drooping, or weakness on one side (stroke signs)"
+  },
+  {
+    "id": 10,
+    "symptom_name": "stomach pain",
+    "aliases": ["abdominal pain", "belly pain", "stomach ache", "tummy ache", "cramps", "abdominal cramps"],
+    "possible_conditions": ["Gastritis", "IBS (Irritable Bowel Syndrome)", "Appendicitis", "Gastroenteritis", "Peptic Ulcer", "Kidney Stones"],
+    "severity": "moderate",
+    "precautions": [
+      "Rest and avoid strenuous activity",
+      "Apply warm compress to abdomen",
+      "Eat light, easily digestible foods",
+      "Avoid NSAIDs on an empty stomach",
+      "Stay hydrated"
+    ],
+    "basic_advice": "Stomach pain location helps identify the cause. Upper middle pain may suggest gastritis or ulcers. Lower right pain could indicate appendicitis. Cramp-like pain often points to gas or IBS. Sudden, severe pain warrants immediate evaluation.",
+    "when_to_see_doctor": "Severe sudden pain, pain with fever, rigid abdomen, pain with vomiting blood or dark stools"
+  },
+  {
+    "id": 11,
+    "symptom_name": "back pain",
+    "aliases": ["backache", "lower back pain", "upper back pain", "spine pain", "back ache"],
+    "possible_conditions": ["Muscle Strain", "Herniated Disc", "Poor Posture", "Kidney Issues", "Sciatica", "Arthritis"],
+    "severity": "mild",
+    "precautions": [
+      "Apply ice for first 48 hours, then heat",
+      "Take OTC pain relievers as directed",
+      "Stay active — bed rest prolongs pain",
+      "Practice good posture",
+      "Gentle stretching exercises"
+    ],
+    "basic_advice": "Most back pain improves within 2-4 weeks with self-care. Stay active — contrary to older advice, bed rest can worsen back pain. Strengthen your core muscles to prevent recurrence. Ergonomic workspaces greatly help those with desk jobs.",
+    "when_to_see_doctor": "Back pain after injury, with bowel/bladder changes, numbness/tingling in legs, or pain that's severe and not improving"
+  },
+  {
+    "id": 12,
+    "symptom_name": "rash",
+    "aliases": ["skin rash", "skin reaction", "hives", "skin irritation", "allergic reaction", "red spots", "itchy skin"],
+    "possible_conditions": ["Allergic Reaction", "Eczema", "Psoriasis", "Contact Dermatitis", "Viral Exanthem", "Heat Rash"],
+    "severity": "moderate",
+    "precautions": [
+      "Avoid scratching the affected area",
+      "Apply cool compresses to reduce itching",
+      "Use fragrance-free moisturizers",
+      "Identify and avoid potential triggers",
+      "Take antihistamines for allergic rashes"
+    ],
+    "basic_advice": "Rashes have many causes — from simple allergies to infections to autoimmune conditions. If the rash appeared suddenly after eating a new food or taking medication, it may be allergic. Document when it started and what you were exposed to.",
+    "when_to_see_doctor": "Rash with difficulty breathing (anaphylaxis — EMERGENCY), spreading rapidly, with fever, or covering large body areas"
+  },
+  {
+    "id": 13,
+    "symptom_name": "runny nose",
+    "aliases": ["nasal discharge", "stuffy nose", "blocked nose", "congestion", "rhinorrhea"],
+    "possible_conditions": ["Common Cold", "Allergic Rhinitis", "Flu", "Sinusitis", "Dry Air Exposure"],
+    "severity": "mild",
+    "precautions": [
+      "Blow your nose gently",
+      "Use saline nasal spray",
+      "Stay hydrated",
+      "Use a humidifier",
+      "Avoid allergen triggers"
+    ],
+    "basic_advice": "A runny nose is typically caused by a cold or allergies. Over-the-counter decongestants and antihistamines can provide relief. Steam inhalation and warm fluids help. Most colds resolve in 7-10 days.",
+    "when_to_see_doctor": "Runny nose with severe headache, symptoms lasting more than 10 days, thick yellow/green discharge"
+  },
+  {
+    "id": 14,
+    "symptom_name": "joint pain",
+    "aliases": ["arthralgia", "joint ache", "knee pain", "joint swelling", "painful joints"],
+    "possible_conditions": ["Arthritis", "Gout", "Lupus", "Viral Infection", "Bursitis", "Injury"],
+    "severity": "moderate",
+    "precautions": [
+      "Rest the affected joint",
+      "Apply ice to reduce inflammation",
+      "Elevate the joint if swollen",
+      "Take NSAIDs for pain relief",
+      "Avoid high-impact activities"
+    ],
+    "basic_advice": "Joint pain can be inflammatory or mechanical. Morning stiffness that improves with movement suggests inflammatory arthritis. Pain after activity suggests mechanical causes. Weight management reduces stress on load-bearing joints.",
+    "when_to_see_doctor": "Joint warmth and swelling, fever with joint pain, inability to bear weight, sudden severe joint pain"
+  },
+  {
+    "id": 15,
+    "symptom_name": "anxiety",
+    "aliases": ["panic", "worry", "stress", "anxious", "nervous", "panic attack", "overthinking"],
+    "possible_conditions": ["Generalized Anxiety Disorder", "Panic Disorder", "PTSD", "Social Anxiety", "OCD", "Hyperthyroidism"],
+    "severity": "moderate",
+    "precautions": [
+      "Practice deep breathing (4-7-8 technique)",
+      "Grounding exercises (5-4-3-2-1 method)",
+      "Limit caffeine and alcohol",
+      "Regular physical exercise",
+      "Mindfulness meditation"
+    ],
+    "basic_advice": "Anxiety is very common and very treatable. The 4-7-8 breathing technique (inhale 4s, hold 7s, exhale 8s) can rapidly calm the nervous system. Regular exercise is clinically proven to reduce anxiety. Don't hesitate to seek professional support.",
+    "when_to_see_doctor": "Anxiety interfering with daily life, panic attacks, suicidal thoughts (seek help immediately)"
+  }
+]

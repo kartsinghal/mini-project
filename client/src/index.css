@@ -1,0 +1,422 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,300;1,14..32,400&display=swap');
+
+/* ─── Design Tokens ──────────────────────────────────────── */
+:root {
+  /* Brand */
+  --teal:       #0f766e;
+  --teal-mid:   #0d9488;
+  --teal-bright:#14b8a6;
+  --teal-pale:  #ccfbf1;
+
+  /* Alerts */
+  --coral:      #e05c3a;
+  --coral-pale: #fef2ee;
+  --amber:      #d97706;
+  --amber-pale: #fef3c7;
+
+  /* Matte dark surfaces */
+  --dark-900:   #0b0f0e;
+  --dark-800:   #111a18;
+  --dark-700:   #162421;
+  --dark-600:   #1d2e2b;
+  --dark-500:   #243b37;
+  --dark-border:#2b4440;
+
+  /* Off-white surfaces */
+  --light-base: #f6f5f3;
+  --light-100:  #edecea;
+  --light-200:  #e2e0dd;
+  --light-border:#d5d3cf;
+  --light-text: #1c2421;
+  --light-muted:#6b7a76;
+
+  /* Full-width section padding — responsive */
+  --section-px: clamp(24px, 6vw, 100px);
+}
+
+/* ─── Base ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Inter is the base — Space Grotesk and Poppins layer over it for headings */
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 99px; }
+
+/* ─── Typography Scale ───────────────────────────────────── */
+/*
+  Font Roles (3-tier system):
+    .display-xl  → Space Grotesk  — Hero heading (H1)
+    .display-lg  → Poppins        — Section heading (H2)
+    .display-md  → Poppins        — Sub-heading / card title (H3)
+    .body-*      → Inter          — All body / UI text
+    .label       → Inter          — Uppercase micro-labels
+*/
+
+/* ── Hero heading: Space Grotesk, tight & punchy ─────────── */
+.display-xl {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: clamp(2.75rem, 6.5vw, 5.25rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;   /* very tight — Space Grotesk looks great compressed */
+  line-height: 1.0;
+}
+
+/* ── Section heading: Poppins, warm & modern ─────────────── */
+.display-lg {
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: clamp(1.85rem, 4vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* ── Sub-section / card heading: Poppins, lighter ───────── */
+.display-md {
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: clamp(1.3rem, 2.5vw, 1.85rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+/* ── Body text: Inter, optimised for reading ─────────────── */
+.body-lg {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+.body-sm {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  font-weight: 400;
+  letter-spacing: 0em;
+}
+
+/* ── Micro label: Inter, uppercase tracking ──────────────── */
+.label {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Explicit font-family helpers (use inline or on wrapper) */
+.font-hero    { font-family: 'Space Grotesk', system-ui, sans-serif !important; }
+.font-section { font-family: 'Poppins', system-ui, sans-serif !important; }
+.font-body    { font-family: 'Inter', system-ui, sans-serif !important; }
+
+/* ─── Dark mode surfaces ─────────────────────────────────── */
+.surface-900 { background: var(--dark-900); }
+.surface-800 { background: var(--dark-800); }
+.surface-card {
+  background: var(--dark-700);
+  border: 1px solid var(--dark-border);
+}
+.surface-card-hover:hover {
+  background: var(--dark-600);
+  border-color: var(--teal);
+}
+
+/* ─── Light mode surfaces ────────────────────────────────── */
+.surface-light { background: var(--light-base); }
+.surface-light-card {
+  background: #fff;
+  border: 1px solid var(--light-border);
+}
+.surface-light-card-hover:hover {
+  border-color: var(--teal);
+  box-shadow: 0 4px 24px rgba(15,118,110,0.1);
+}
+
+/* ─── Teal highlight text ────────────────────────────────── */
+.text-brand { color: var(--teal-bright); }
+.text-brand-solid { color: var(--teal); }
+
+/* ─── Gradient text ──────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--teal-bright) 0%, #34d399 60%, var(--teal-bright) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Noise texture overlay ──────────────────────────────── */
+.noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+/* ─── Teal glow ──────────────────────────────────────────── */
+.glow-teal { box-shadow: 0 0 0 1px rgba(20,184,166,0.3), 0 8px 40px rgba(15,118,110,0.25); }
+.glow-teal-sm { box-shadow: 0 0 0 1px rgba(20,184,166,0.2), 0 4px 16px rgba(15,118,110,0.18); }
+.glow-coral { box-shadow: 0 0 0 1px rgba(224,92,58,0.3), 0 8px 32px rgba(224,92,58,0.2); }
+
+/* ─── Diagonal clip ──────────────────────────────────────── */
+.clip-diagonal {
+  clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
+}
+.clip-diagonal-sm {
+  clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
+}
+
+/* ─── Pill badge ─────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.28rem 0.75rem;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.badge-teal {
+  background: rgba(20,184,166,0.12);
+  color: var(--teal-bright);
+  border: 1px solid rgba(20,184,166,0.25);
+}
+.badge-coral {
+  background: rgba(224,92,58,0.1);
+  color: var(--coral);
+  border: 1px solid rgba(224,92,58,0.25);
+}
+.badge-amber {
+  background: rgba(217,119,6,0.1);
+  color: var(--amber);
+  border: 1px solid rgba(217,119,6,0.2);
+}
+.badge-neutral-dark {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.badge-neutral-light {
+  background: var(--light-100);
+  color: var(--light-muted);
+  border: 1px solid var(--light-border);
+}
+
+/* ─── Primary button ─────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.btn-primary:hover {
+  background: var(--teal-mid);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(15,118,110,0.35);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-ghost-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-ghost-dark:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.22);
+  color: #fff;
+}
+
+.btn-ghost-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  background: transparent;
+  color: var(--light-muted);
+  border: 1px solid var(--light-border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-ghost-light:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+/* ─── Input base ─────────────────────────────────────────── */
+.input-dark {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--dark-border);
+  border-radius: 10px;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.input-dark::placeholder { color: rgba(255,255,255,0.25); }
+.input-dark:focus {
+  border-color: var(--teal-bright);
+  background: rgba(255,255,255,0.06);
+}
+
+.input-light {
+  background: #fff;
+  border: 1.5px solid var(--light-200);
+  border-radius: 10px;
+  color: var(--light-text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-light::placeholder { color: #b0aca6; }
+.input-light:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(15,118,110,0.1);
+}
+
+/* ─── Mini-animations ────────────────────────────────────── */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+.float { animation: float-gentle 5s ease-in-out infinite; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+.pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+@keyframes scan-line {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(400%); opacity: 0; }
+}
+.scan { animation: scan-line 3s linear infinite; }
+
+@keyframes shimmer-move {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0) 20%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0) 80%);
+  background-size: 600px 100%;
+  animation: shimmer-move 1.6s infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 0.5s ease both; }
+
+/* Pulsing ring — used by SeverityAlertBanner */
+@keyframes pulse-ring {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 0.8; transform: scale(1.04); }
+}
+
+/* Cursor blink — used by AIChat streaming */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ─── Separator line ─────────────────────────────────────── */
+.sep {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+}
+.sep-light {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--light-200), transparent);
+}
+
+/* ─── Timeline connector ─────────────────────────────────── */
+.timeline-line {
+  position: absolute;
+  left: 19px;
+  top: 40px;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--teal), transparent);
+}
+
+/* ─── Number circle ──────────────────────────────────────── */
+.step-num {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ─── Bento grid ───────────────────────────────────────────── */
+.bento { display: grid; gap: 1rem; }
+.bento-2 { grid-template-columns: repeat(2, 1fr); }
+.bento-3 { grid-template-columns: repeat(3, 1fr); }
+
+@media (max-width: 768px) {
+  .bento-2, .bento-3 { grid-template-columns: 1fr; }
+}
+
+/* ─── Hover lift utility ────────────────────────────────── */
+.hover-lift {
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* Smooth transition utility */
+.transition-smooth {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Framer Motion: only suppress transitions on non-interactive elements ─── */
+/* Removed the aggressive * { transition-property: none } that was blocking all CSS transitions.
+   Framer Motion handles its own transitions; CSS transitions are needed for hover effects. */
