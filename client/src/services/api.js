@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'mini-project-production-ee75.up.railway.app',
+  baseURL: 'https://mini-project-production-ee75.up.railway.app/api',
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });
