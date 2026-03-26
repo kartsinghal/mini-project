@@ -21,6 +21,20 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters'],
     },
+    age: {
+      type: Number,
+      min: [0, 'Age must be positive'],
+      max: [120, 'Age tracking limit exceeded'],
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'other', 'prefer-not-to-say'],
+      default: 'prefer-not-to-say',
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );

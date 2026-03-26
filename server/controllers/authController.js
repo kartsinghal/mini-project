@@ -44,6 +44,9 @@ exports.signup = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        age: user.age,
+        gender: user.gender,
+        phone: user.phone,
       },
     });
   } catch (err) {
@@ -86,10 +89,68 @@ exports.login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        age: user.age,
+        gender: user.gender,
+        phone: user.phone,
       },
     });
   } catch (err) {
     console.error('[login]', err);
     res.status(500).json({ message: 'Server error. Please try again.' });
+  }
+};
+
+// ── GET /api/auth/profile ───────────────────────────────────────────────────
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    res.status(200).json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      age: user.age,
+      gender: user.gender,
+      phone: user.phone,
+    });
+  } catch (err) {
+    console.error('[getProfile]', err);
+    res.status(500).json({ message: 'Server error fetching profile.' });
+  }
+};
+
+// ── PUT /api/auth/profile ───────────────────────────────────────────────────
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, age, gender, phone } = req.body;
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    if (name && name.trim().length >= 2) user.name = name.trim();
+    if (age !== undefined) user.age = Number(age) || undefined;
+    if (gender) user.gender = gender;
+    if (phone !== undefined) user.phone = phone.trim();
+
+    await user.save();
+
+    res.status(200).json({
+      message: 'Profile updated successfully.',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        age: user.age,
+        gender: user.gender,
+        phone: user.phone,
+      },
+    });
+  } catch (err) {
+    console.error('[updateProfile]', err);
+    res.status(400).json({ message: err.message || 'Error updating profile.' });
   }
 };

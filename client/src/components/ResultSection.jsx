@@ -42,8 +42,7 @@ function getConfidence(severity, index) {
   return lo + Math.round(((index * 7) % (hi - lo + 1)));
 }
 
-function TimelineItem({ match, index, isDark, total }) {
-  const [open, setOpen] = useState(index === 0);
+function TimelineItem({ match, index, isDark, total, isOpen, onToggle }) {
   const cfg = SEVERITY[match.severity] || SEVERITY.mild;
   const isLast = index === total - 1;
   const confidence = getConfidence(match.severity, index);
@@ -100,7 +99,7 @@ function TimelineItem({ match, index, isDark, total }) {
       >
         {/* Header */}
         <button
-          onClick={() => setOpen(!open)}
+          onClick={onToggle}
           style={{
             width: '100%', background: 'none', border: 'none', cursor: 'pointer',
             padding: '16px 18px',
@@ -152,13 +151,13 @@ function TimelineItem({ match, index, isDark, total }) {
 
           {/* Toggle */}
           <span style={{ color: isDark ? 'rgba(255,255,255,0.3)' : 'var(--light-muted)', flexShrink: 0 }}>
-            {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </span>
         </button>
 
         {/* Expanded body */}
         <AnimatePresence>
-          {open && (
+          {isOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
@@ -180,7 +179,7 @@ function TimelineItem({ match, index, isDark, total }) {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 7 }}>
                     <Info size={13} style={{ color: 'var(--teal-bright)', flexShrink: 0 }} />
                     <span style={{ fontSize: 11.5, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--teal-bright)' }}>
-                      Advisory
+                      Our Advice
                     </span>
                   </div>
                   <p style={{ fontSize: 13.5, lineHeight: 1.65, color: isDark ? 'rgba(255,255,255,0.65)' : 'var(--light-muted)', margin: 0 }}>
@@ -195,11 +194,11 @@ function TimelineItem({ match, index, isDark, total }) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
                       <Stethoscope size={13} style={{ color: '#a78bfa' }} />
                       <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: isDark ? 'rgba(255,255,255,0.35)' : 'var(--light-muted)' }}>
-                        Possible causes
+                        What it could be
                       </span>
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                      {match.possible_conditions.map((c) => (
+                      {match.possible_conditions?.map((c) => (
                         <span key={c} style={{
                           padding: '3px 9px', borderRadius: 99, fontSize: 11.5, fontWeight: 500,
                           background: isDark ? 'rgba(167,139,250,0.1)' : 'rgba(139,92,246,0.07)',
@@ -217,11 +216,11 @@ function TimelineItem({ match, index, isDark, total }) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
                       <ThumbsUp size={13} style={{ color: '#34d399' }} />
                       <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: isDark ? 'rgba(255,255,255,0.35)' : 'var(--light-muted)' }}>
-                        Precautions
+                        What you can do
                       </span>
                     </div>
                     <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      {match.precautions.slice(0, 4).map((p, i) => (
+                      {match.precautions?.slice(0, 4).map((p, i) => (
                         <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
                           <ArrowRight size={11} style={{ color: '#34d399', marginTop: 3, flexShrink: 0 }} />
                           <span style={{ fontSize: 12.5, color: isDark ? 'rgba(255,255,255,0.55)' : 'var(--light-muted)', lineHeight: 1.5 }}>{p}</span>
@@ -243,7 +242,7 @@ function TimelineItem({ match, index, isDark, total }) {
                   <Clock size={13} style={{ color: match.severity === 'critical' ? '#ef4444' : '#f59e0b', marginTop: 2, flexShrink: 0 }} />
                   <div>
                     <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: match.severity === 'critical' ? '#ef4444' : '#f59e0b', display: 'block', marginBottom: 4 }}>
-                      When to see a doctor
+                      When to get help
                     </span>
                     <p style={{ fontSize: 12.5, margin: 0, lineHeight: 1.55, color: isDark ? 'rgba(255,255,255,0.55)' : 'var(--light-muted)' }}>
                       {match.when_to_see_doctor}
@@ -278,14 +277,14 @@ async function downloadReport(results) {
   doc.text('HEALTHLENS', margin, 23);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
-  doc.text('AI-Powered Symptom Analysis Report', margin + 86, 23);
+  doc.text('Your Health Analysis Report', margin + 86, 23);
   doc.text(`Generated: ${new Date().toLocaleString()}`, pageW - margin, 23, { align: 'right' });
 
   // Title
   doc.setTextColor(28, 36, 33);
   doc.setFontSize(22);
   doc.setFont('helvetica', 'bold');
-  doc.text('Health Analysis Report', margin, y + 10);
+  doc.text('Your Health Analysis', margin, y + 10);
   y += 36;
 
   // Divider
@@ -386,6 +385,7 @@ async function downloadReport(results) {
 export default function ResultSection({ results }) {
   const { isDark } = useTheme();
   const [downloading, setDownloading] = useState(false);
+  const [activeCard, setActiveCard] = useState(0);
   if (!results) return null;
 
   const { data } = results;
@@ -422,10 +422,10 @@ export default function ResultSection({ results }) {
               <AlertTriangle size={20} style={{ color: '#ef4444', flexShrink: 0, marginTop: 1 }} />
               <div>
                 <p style={{ fontWeight: 700, fontSize: 15, color: '#ef4444', marginBottom: 4 }}>
-                  Emergency — Seek immediate care
+                  Emergency: Get help right away
                 </p>
                 <p style={{ fontSize: 13, color: isDark ? 'rgba(255,255,255,0.6)' : 'var(--light-muted)', lineHeight: 1.55, margin: 0 }}>
-                  Your symptoms may indicate a serious or life-threatening condition. Call <strong>108 / 112 / 911</strong> immediately or go to the nearest emergency room.
+                  This sounds serious. Please call <strong>108 / 112 / 911</strong> right now or head to the nearest emergency room. Don't wait.
                 </p>
               </div>
             </motion.div>
@@ -435,7 +435,7 @@ export default function ResultSection({ results }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, flexWrap: 'wrap', gap: 12 }}>
             <div>
               <span className="label" style={{ color: 'var(--teal-bright)', display: 'block', marginBottom: 6 }}>
-                Analysis Results
+                Here's what we found
               </span>
               <h2
                 className="display-md"
@@ -446,7 +446,7 @@ export default function ResultSection({ results }) {
                   letterSpacing: '-0.018em',
                 }}
               >
-                {hasMatches ? `${data.matches.length} insight${data.matches.length > 1 ? 's' : ''} found` : 'No matches found'}
+                {hasMatches ? `We found ${data.matches.length} possible reason${data.matches.length > 1 ? 's' : ''}` : 'We couldn\'t find a match'}
               </h2>
             </div>
 
@@ -504,6 +504,11 @@ export default function ResultSection({ results }) {
                   index={i}
                   total={data.matches.length}
                   isDark={isDark}
+                  isOpen={activeCard === i}
+                  onToggle={(e) => {
+                    e.stopPropagation();
+                    setActiveCard(activeCard === i ? null : i);
+                  }}
                 />
               ))}
             </div>
@@ -525,10 +530,10 @@ export default function ResultSection({ results }) {
                 letterSpacing: '-0.02em',
                 color: isDark ? '#fff' : 'var(--light-text)', marginBottom: 8,
               }}>
-                No matches found
+                We couldn't quite figure this one out.
               </h3>
               <p style={{ fontSize: 14, color: isDark ? 'rgba(255,255,255,0.4)' : 'var(--light-muted)', lineHeight: 1.6 }}>
-                Try using simpler terms — "fever", "cough", "headache". The more specific you are, the better.
+                Try using simpler words like 'fever' or 'cough'. Keep it simple and specific!
               </p>
             </motion.div>
           )}
