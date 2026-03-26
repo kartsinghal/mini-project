@@ -2,79 +2,59 @@ import { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Activity, Shield, Zap } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useScrollPause } from '../hooks/useScrollPause';
 
-/* ─── Continuously looping ECG line ──────────────────────── */
-function EcgLine() {
+/* ─── ECG line: static path + GPU-only traveling light sweep ─── */
+function EcgLine({ paused }) {
+  // The waveform path is completely static — no SVG path animation at all.
+  // The pulse effect is a radial gradient rect that slides left→right
+  // using CSS translateX only (compositor thread, zero paint cost).
+  const PATH = "M0 30 L55 30 L70 30 L80 8 L90 54 L105 3 L120 58 L135 30 L155 30 L170 30 L180 18 L190 42 L200 22 L210 40 L220 30 L280 30 L320 30 L330 12 L342 48 L355 5 L368 55 L380 30 L440 30";
   return (
-    <svg
-      viewBox="0 0 440 60"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ width: '100%', height: 'auto' }}
-    >
-      <defs>
-        {/* Moving gradient mask: the line "travels" left to right in a loop */}
-        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="var(--teal-bright)" stopOpacity="0" />
-          <stop offset="30%" stopColor="var(--teal-bright)" stopOpacity="0.9" />
-          <stop offset="60%" stopColor="var(--teal-bright)" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="var(--teal-bright)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-
-      {/* Static faded trace — always visible */}
-      <path
-        d="M0 30 L55 30 L70 30 L80 8 L90 54 L105 3 L120 58 L135 30 L155 30 L170 30 L180 18 L190 42 L200 22 L210 40 L220 30 L280 30 L320 30 L330 12 L342 48 L355 5 L368 55 L380 30 L440 30"
-        stroke="var(--teal-bright)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        opacity="0.18"
-      />
-
-      {/* Animated glowing trace */}
-      <motion.path
-        d="M0 30 L55 30 L70 30 L80 8 L90 54 L105 3 L120 58 L135 30 L155 30 L170 30 L180 18 L190 42 L200 22 L210 40 L220 30 L280 30 L320 30 L330 12 L342 48 L355 5 L368 55 L380 30 L440 30"
-        stroke="url(#ecgGrad)"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: [0, 1], opacity: [0, 1, 1, 0] }}
-        transition={{
-          duration: 3.2,
-          ease: 'easeInOut',
-          repeat: Infinity,
-          repeatDelay: 1.2,
-          times: [0, 0.5, 0.9, 1],
-        }}
-      />
-
-      {/* Glowing dot that travels the path */}
-      <motion.circle
-        r="3.5"
-        fill="var(--teal-bright)"
-        initial={{ offsetDistance: '0%', opacity: 0 }}
-        animate={{ offsetDistance: ['0%', '100%'], opacity: [0, 1, 1, 0] }}
-        transition={{
-          duration: 3.2,
-          ease: 'easeInOut',
-          repeat: Infinity,
-          repeatDelay: 1.2,
-          times: [0, 0.05, 0.9, 1],
-        }}
-        style={{
-          offsetPath: "path('M0 30 L55 30 L70 30 L80 8 L90 54 L105 3 L120 58 L135 30 L155 30 L170 30 L180 18 L190 42 L200 22 L210 40 L220 30 L280 30 L320 30 L330 12 L342 48 L355 5 L368 55 L380 30 L440 30')",
-          filter: 'drop-shadow(0 0 6px #14b8a6)',
-        }}
-      />
-    </svg>
+    <div style={{ width: '100%', lineHeight: 0, position: 'relative' }}>
+      <svg viewBox="0 0 440 60" fill="none" xmlns="http://www.w3.org/2000/svg"
+        style={{ width: '100%', height: 'auto', display: 'block' }}>
+        <defs>
+          <clipPath id="ecg-clip"><rect x="0" y="0" width="440" height="60" /></clipPath>
+          <radialGradient id="sweep-grad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stopColor="#ffffff" stopOpacity="0.9" />
+            <stop offset="35%"  stopColor="#5eead4" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#14b8a6" stopOpacity="0"  />
+          </radialGradient>
+        </defs>
+        {/* Dim static base trace */}
+        <path d={PATH} stroke="var(--teal-bright)" strokeWidth="1.6"
+          strokeLinecap="round" strokeLinejoin="round" opacity="0.22" />
+        {/* Brighter overlay trace */}
+        <path d={PATH} stroke="var(--teal-bright)" strokeWidth="1.6"
+          strokeLinecap="round" strokeLinejoin="round" opacity="0.52"
+          clipPath="url(#ecg-clip)" />
+        {/* Sweep: gradient rect slides L→R — GPU translateX only */}
+        <g clipPath="url(#ecg-clip)">
+          <rect x="-88" y="0" width="88" height="60"
+            fill="url(#sweep-grad)"
+            style={{
+              animation: paused ? 'none' : 'ecg-sweep 3s ease-in-out infinite',
+              willChange: 'transform',
+              transform: 'translateZ(0)',
+            }}
+          />
+        </g>
+      </svg>
+      <style>{`
+        @keyframes ecg-sweep {
+          0%   { transform: translateX(0);     opacity: 0;    }
+          8%   { opacity: 0.9; }
+          88%  { opacity: 0.9; }
+          100% { transform: translateX(528px); opacity: 0;    }
+        }
+      `}</style>
+    </div>
   );
 }
 
 /* ─── Metric card — adapts to dark/light theme ───────────── */
-function MetricCard({ label, value, unit, color, delay, isDark }) {
+function MetricCard({ label, value, unit, color, delay, isDark, paused }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -130,11 +110,11 @@ function MetricCard({ label, value, unit, color, delay, isDark }) {
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
         <motion.span
-          animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
+          animate={paused ? {} : { scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
           style={{ width: 6, height: 6, borderRadius: '50%', background: color, display: 'inline-block' }}
         />
-        <span style={{ fontSize: 11, color: isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.35)' }}>Live monitoring</span>
+        <span style={{ fontSize: 11, color: isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.35)' }}>Typical range</span>
       </div>
     </motion.div>
   );
@@ -142,6 +122,7 @@ function MetricCard({ label, value, unit, color, delay, isDark }) {
 
 export default function HeroSection() {
   const { isDark } = useTheme();
+  const isScrolling = useScrollPause();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '28%']);
@@ -169,22 +150,24 @@ export default function HeroSection() {
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         {/* Top-left teal orb */}
         <motion.div
-          animate={{ scale: [1, 1.08, 1], opacity: [0.4, 0.6, 0.4] }}
+          animate={isScrolling ? {} : { scale: [1, 1.08, 1], opacity: [0.4, 0.6, 0.4] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
           style={{
             position: 'absolute', top: '-10%', left: '-5%',
             width: 560, height: 560, borderRadius: '50%',
             background: 'radial-gradient(circle, rgba(15,118,110,0.22) 0%, transparent 65%)',
+            willChange: 'transform', transform: 'translateZ(0)',
           }}
         />
         {/* Bottom-right faint orb */}
         <motion.div
-          animate={{ scale: [1, 1.12, 1], opacity: [0.2, 0.35, 0.2] }}
+          animate={isScrolling ? {} : { scale: [1, 1.12, 1], opacity: [0.2, 0.35, 0.2] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
           style={{
             position: 'absolute', bottom: '-15%', right: '35%',
             width: 400, height: 400, borderRadius: '50%',
             background: 'radial-gradient(circle, rgba(20,184,166,0.14) 0%, transparent 65%)',
+            willChange: 'transform', transform: 'translateZ(0)',
           }}
         />
         {/* Subtle diagonal noise-like grain */}
@@ -220,7 +203,7 @@ export default function HeroSection() {
                 transition={{ duration: 2, repeat: Infinity }}
                 style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--teal-bright)', display: 'inline-block' }}
               />
-              Health Awareness Platform
+              Your Personal Health Assistant
             </span>
           </motion.div>
 
@@ -238,7 +221,7 @@ export default function HeroSection() {
               lineHeight: 1.01,
             }}
           >
-            Know what your<br />
+            Listen to your<br />
             {/* Highlighted word — underline + glow effect */}
             <span style={{ position: 'relative', display: 'inline-block' }}>
               <span className="gradient-text">body</span>
@@ -257,8 +240,8 @@ export default function HeroSection() {
                 }}
               />
             </span>
-            {' '}is<br />
-            telling you.
+            .<br />
+            We'll help you understand it.
           </motion.h1>
 
           {/* Subtext */}
@@ -273,7 +256,7 @@ export default function HeroSection() {
               letterSpacing: '-0.005em',
             }}
           >
-            Describe your symptoms and get instant, awareness-based health insights — precautions, possible conditions, and when to see a doctor.
+            Tell us how you're feeling, and we'll give you instant, easy-to-understand advice on what you should do next.
           </motion.p>
 
           {/* Looping ECG line */}
@@ -301,7 +284,7 @@ export default function HeroSection() {
               whileTap={{ scale: 0.97 }}
               transition={{ type: 'spring', stiffness: 400, damping: 20 }}
             >
-              Check symptoms
+              Check your symptoms
               <ArrowRight size={16} />
             </motion.button>
 
@@ -312,7 +295,7 @@ export default function HeroSection() {
               whileTap={{ scale: 0.97 }}
               transition={{ type: 'spring', stiffness: 400, damping: 24 }}
             >
-              First Aid Guide
+              Quick First Aid
             </motion.button>
           </motion.div>
 
@@ -328,9 +311,9 @@ export default function HeroSection() {
             }}
           >
             {[
-              { icon: Shield, text: 'Privacy first — no data stored' },
-              { icon: Zap, text: 'Results in under 1 second' },
-              { icon: Activity, text: '15 symptom categories' },
+              { icon: Shield, text: '100% private. We don\'t save your data.' },
+              { icon: Zap, text: 'Get answers in seconds' },
+              { icon: Activity, text: 'Covers 15+ common health areas' },
             ].map(({ icon: Icon, text }, i) => (
               <motion.div
                 key={text}
@@ -399,7 +382,7 @@ export default function HeroSection() {
           {/* Scan line — inside glass */}
           <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', borderRadius: 24 }}>
             <motion.div
-              animate={{ y: ['-100%', '300%'] }}
+              animate={isScrolling ? {} : { y: ['-100%', '300%'] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'linear', repeatDelay: 1 }}
               style={{
                 width: '100%', height: 1,
@@ -431,16 +414,24 @@ export default function HeroSection() {
                 color: isDark ? 'rgba(255,255,255,0.35)' : 'var(--teal)',
                 marginBottom: 20, display: 'block',
               }}>
-                Live Health Monitor
+                Health Insights
               </span>
             </motion.div>
 
             {/* Metric cards — staggered */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <MetricCard label="Heart Rate"   value="72"   unit="bpm" color="#f43f5e" delay={0.52} isDark={isDark} />
-              <MetricCard label="Blood Oxygen" value="98"   unit="%"  color="#0891b2" delay={0.64} isDark={isDark} />
-              <MetricCard label="Temperature"  value="98.6" unit="°F" color="#ea580c" delay={0.76} isDark={isDark} />
+              <MetricCard label="Heart Rate"   value="60–100" unit="bpm" color="#f43f5e" delay={0.52} isDark={isDark} paused={isScrolling} />
+              <MetricCard label="Blood Oxygen" value="95–100" unit="%"  color="#0891b2" delay={0.64} isDark={isDark} paused={isScrolling} />
+              <MetricCard label="Temperature"  value="97–99" unit="°F" color="#ea580c" delay={0.76} isDark={isDark} paused={isScrolling} />
             </div>
+
+            {/* Disclaimer */}
+            <p style={{
+              fontSize: 10.5, color: isDark ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.32)',
+              marginTop: 8, lineHeight: 1.5, fontStyle: 'italic',
+            }}>
+              For awareness only — not real-time tracking.
+            </p>
 
             {/* Dataset coverage bar */}
             <motion.div
@@ -464,9 +455,9 @@ export default function HeroSection() {
                 Dataset coverage
               </div>
               {[
-                { label: 'Symptoms mapped', pct: 92 },
-                { label: 'Condition advisories', pct: 78 },
-                { label: 'First-aid procedures', pct: 100 },
+                { label: 'Symptoms analyzed', pct: 92 },
+                { label: 'Health advisories', pct: 78 },
+                { label: 'First aid guides', pct: 100 },
               ].map(({ label, pct }) => (
                 <div key={label} style={{ marginBottom: 9 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>

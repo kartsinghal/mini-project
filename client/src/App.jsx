@@ -10,6 +10,7 @@ import SymptomChecker from './components/SymptomChecker';
 import ResultSection from './components/ResultSection';
 import HealthScoreMeter from './components/HealthScoreMeter';
 import SeverityAlertBanner from './components/SeverityAlertBanner';
+import WhenToSeeDoctor from './components/WhenToSeeDoctor';
 import FirstAidSection from './components/FirstAidSection';
 import AIChat from './components/AIChat';
 import DisclaimerBanner from './components/DisclaimerBanner';
@@ -35,6 +36,7 @@ function HomePage() {
         <SymptomChecker onResults={setResults} />
         <ResultSection results={results} />
         {results && <HealthScoreMeter results={results} />}
+        <WhenToSeeDoctor />
         <FirstAidSection />
         <AIChat />
       </main>

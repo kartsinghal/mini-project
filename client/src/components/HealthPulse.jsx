@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import { Activity } from 'lucide-react';
+import { useScrollPause } from '../hooks/useScrollPause';
 
 // Animated radial arc segments representing a health severity gauge
 const WEDGES = [
@@ -38,6 +39,7 @@ function ArcSegment({ cx, cy, r, startAngle, endAngle, color, thickness }) {
 
 export default function HealthPulse() {
   const { isDark } = useTheme();
+  const isScrolling = useScrollPause();
   const [activeIdx, setActiveIdx] = useState(0);
   const controls = useAnimation();
 
@@ -116,9 +118,9 @@ export default function HealthPulse() {
               <motion.circle
                 cx={100} cy={100} r={6}
                 fill={active.color}
-                animate={{ scale: [1, 1.3, 1] }}
+                animate={isScrolling ? {} : { scale: [1, 1.3, 1] }}
                 transition={{ duration: 1.4, repeat: Infinity }}
-                style={{ filter: `drop-shadow(0 0 6px ${active.color})` }}
+                style={{ filter: `drop-shadow(0 0 6px ${active.color})`, willChange: 'transform', transform: 'translateZ(0)' }}
               />
             </svg>
 
@@ -163,9 +165,9 @@ export default function HealthPulse() {
           <div style={{ width: '80%', marginTop: 10, position: 'relative' }}>
             <div style={{ height: 2, background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)', borderRadius: 99, overflow: 'hidden' }}>
               <motion.div
-                animate={{ x: ['-100%', '200%'] }}
+                animate={isScrolling ? {} : { x: ['-100%', '200%'] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.8 }}
-                style={{ height: '100%', width: '50%', background: `linear-gradient(90deg, transparent, ${active.color}, transparent)`, borderRadius: 99 }}
+                style={{ height: '100%', width: '50%', background: `linear-gradient(90deg, transparent, ${active.color}, transparent)`, borderRadius: 99, willChange: 'transform', transform: 'translateZ(0)' }}
               />
             </div>
           </div>

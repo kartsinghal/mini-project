@@ -27,4 +27,14 @@ export const saveHistory = async (payload, token) => {
   return data;
 };
 
+export const getUserProfile = async (token) => {
+  const { data } = await api.get('/auth/profile', { headers: { Authorization: `Bearer ${token}` } });
+  return data;
+};
+
+export const updateUserProfile = async (payload, token) => {
+  const { data } = await api.put('/auth/profile', payload, { headers: { Authorization: `Bearer ${token}` } });
+  return data;
+};
+
 export default api;

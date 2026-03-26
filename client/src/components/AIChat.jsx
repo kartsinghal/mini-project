@@ -9,7 +9,7 @@ const RESPONSES = {
   headache: "Most headaches are tension or dehydration-related. Rest in a quiet dark room, hydrate, and take OTC pain relief if needed. Sudden severe 'thunderclap' headaches need immediate attention.",
   stress: "Try 4-7-8 breathing: inhale 4s, hold 7s, exhale 8s. Regular movement (even a 10-min walk) significantly reduces cortisol. Mindfulness and sleep hygiene are proven interventions.",
   stroke: "Remember FAST: Face drooping, Arm weakness, Speech difficulty, Time to call 112/911. Every minute without treatment = ~1.9 million neurons lost. Act immediately.",
-  default: "Thanks for sharing that. I can offer general health awareness insights, but please use the Symptom Checker above for a structured analysis. For anything serious, consult a qualified clinician.",
+  default: "Thanks for sharing. I'm here to give you general advice, but for a deeper look, try the Symptom Checker above. Always check with a real doctor if you're worried!",
 };
 
 const QUICK = [
@@ -121,7 +121,7 @@ export default function AIChat() {
   const { isDark } = useTheme();
   const [messages, setMessages] = useState([{
     role: 'assistant',
-    text: "Hi — I'm the HealthLens Advisor. Ask me about symptoms, first aid, or general health awareness. Not a doctor; always consult a physician for medical decisions.",
+    text: "Hi! I'm your HealthLens Advisor. You can ask me about symptoms, first aid, or general health tips. Just remember, I'm an AI, not a doctor—always check with a professional for real medical decisions.",
     time: new Date(),
     id: 0,
   }]);
@@ -159,7 +159,7 @@ export default function AIChat() {
     const initId = idRef.current++;
     setMessages([{
       role: 'assistant',
-      text: "Chat cleared. What's on your mind?",
+      text: "Fresh start! What’s on your mind?",
       time: new Date(),
       id: initId,
     }]);
@@ -202,10 +202,10 @@ export default function AIChat() {
               fontFamily: "'Poppins', system-ui, sans-serif",
             }}
           >
-            Ask the Advisor
+            Chat with us
           </h2>
           <p className="body-sm" style={{ color: isDark ? 'rgba(255,255,255,0.4)' : 'var(--light-muted)' }}>
-            Awareness-only guidance. Not a medical diagnosis.
+            Here to help, but not a replacement for a real doctor.
           </p>
         </motion.div>
 
